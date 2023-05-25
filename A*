@@ -1,0 +1,108 @@
+// A* algorithm
+
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+void createGraph(int V, int E, vector<pair<int, int>> adjlist[])
+{
+    for (int i = 0; i < E; i++)
+    {
+        int u, v, wt;
+        cout << "Enter the src, desti, wt for current edge: ";
+        cin >> u >> v >> wt;
+        adjlist[u].push_back({v, wt});
+        adjlist[v].push_back({u, wt});
+    }
+    // printing the created graph
+    cout << "\nGraph is:" << endl; //[src]->{desti,wt}
+    for (int i = 0; i < V; i++)
+    {
+        cout << i << " : ";
+        for (auto x : adjlist[i])
+        {
+            cout << "(" << x.first << "," << x.second << ")";
+        }
+        cout << endl;
+    }
+}
+
+// A* function
+void Call_Astar(int V, int E, vector<pair<int, int>> adjlist[])
+{
+    // required 4 vectors => h[], g[], f[], parent[]
+    vector<int> h(V);           // heuristic distance: dist of currNode to destination
+    vector<int> g(V, INT8_MAX); // cost vector: dist of currNode from the start node //initialize to infinity
+    vector<int> f(V);           // required function f=g+h
+    vector<int> parent(V, -1);  // parent vector initialize to -1 all
+
+    // taking the heuristic values as input from user for all nodes
+    cout << "Enter the heuristic values one-by-one sequentially: ";
+    for (int i = 0; i < V; i++)
+    {
+        cin >> h[i];
+    }
+
+    // maintain the priority queue => storing the pair < f value, node >
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq; // pq as mean heap so always get minimim f-valued node
+
+    // initial setup for srcNode //let take 0 as src node
+    g[0] = 0; // cost of 0 from 0 is 0
+    f[0] = g[0] + h[0];
+    // now push into pq this srcNode with its f-value calculated i.e. <f[0],0>
+    pq.push({f[0], 0});
+
+    // now while loop till pq not empty
+    while (!pq.empty()) // as pq storing pairs <f-value,node>
+    {
+        int currNode = pq.top().second;
+        pq.pop();
+        // now iterate over the neighbours of currNode from adjlist
+        for (auto x : adjlist[currNode]) // adjlist[currNode]->{neighbour,wt}
+        {
+            int neighbour = x.first;
+            int neighbour_wt = x.second;
+            int new_dist = g[currNode] + neighbour_wt; // updated_dist = cost to reach currNode + wt to reach neighbour
+            if (new_dist < g[neighbour])               // if got lower value => update all the vectors
+            {
+                g[neighbour] = new_dist;                    // store new dist in g[] for neighbour
+                f[neighbour] = g[neighbour] + h[neighbour]; // now find new f-value for neighbour by formula f=g+h
+                pq.push({f[neighbour], neighbour});         // push this updated {f-value,neighbourNode} in pq
+                parent[neighbour] = currNode;               // update parent of neighbour as curNode
+            }
+        }
+    }
+
+    // now destination was last node (V-1)
+    // parent[] array is traverse back to get the shortest path found by A* algorithm : stop at -1
+    vector<int> path; // vector to store the shortest path
+    int destination = V - 1;
+    int i = destination;
+    while (i != -1)
+    {
+        path.push_back(i);
+        i = parent[i]; // moveing to parent's previously//backward direction
+    }
+    // reverse the path[] vector befor printing the path
+    reverse(path.begin(), path.end()); // #include<algorithm>
+
+    // printing the shortest path from src=0 to desti=V-1
+    cout << "shortest path from src to desti is: " << endl;
+    for (auto x : path)
+    {
+        cout << x << " -> ";
+    }
+}
+
+int main()
+{
+    int V, E; // input total no. of vertices and edges
+    cout << "Enter total vertices and edges: ";
+    cin >> V >> E;
+    vector<pair<int, int>> adjlist[V];
+    createGraph(V, E, adjlist);
+    Call_Astar(V, E, adjlist);
+    return 0;
+}
