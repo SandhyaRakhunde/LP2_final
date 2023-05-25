@@ -1,0 +1,147 @@
+#include <iostream>
+using namespace std;
+
+void checkPerformance()
+{
+    string name, dept, gender;
+    int age, last_rat, ppt, salary, leave, hour, task, experience;
+    cout << "What is name of Employee: ";
+    cin >> name;
+    cout << "What is your department(web/testing): ";
+    cin >> dept;
+    cout << "What is gender of " << name << " (M/F) ";
+    cin >> gender;
+    cout << "What is age: ";
+    cin >> age;
+    cout << "What was last year's rating out of 5 : ";
+    cin >> last_rat;
+    cout << "Enter the experience in year ";
+    cin >> experience;
+    cout << "How many tasks completed by " << name << " in last year (out of 10) : ";
+    cin >> task;
+    cout << "How many presentations given by " << name << " in last year : ";
+    cin >> ppt;
+    cout << "What is salary: ";
+    cin >> salary;
+    cout << "How many leaves taken last year: ";
+    cin >> leave;
+    cout << "How many hours " << name << " works each week: ";
+    cin >> hour;
+
+    int curr_rat = 0;
+    if (hour > 49)
+        curr_rat++;
+    if (ppt >= 10)
+        curr_rat++;
+    if (leave <= 20)
+        curr_rat++;
+    if (task >= 8)
+        curr_rat = curr_rat + 2;
+
+    cout << "The evaluation of " << name << endl;
+    cout << "This year rating is " << curr_rat << endl;
+
+    if (gender == "M")
+    {
+        if (dept == "web")
+        {
+            if (hour > 35 && task > 7)
+            {
+                if (salary <= 800000)
+                    cout << "Increament in salary by 1lakh" << endl;
+                else
+                    cout << "Keep the salary same" << endl;
+            }
+            else
+            {
+                if (salary >= 1500000)
+                    cout << "decrement in salary by 1lakh" << endl;
+                else
+                    cout << "Keep the salary same" << endl;
+            }
+        }
+        if (dept == "testing")
+        {
+            if (hour > 35 && task > 7)
+            {
+                if (salary <= 700000)
+                    cout << "Increament in salary by 1lakh" << endl;
+                else
+                    cout << "Keep the salary same" << endl;
+            }
+            else
+            {
+                if (salary >= 1200000)
+                    cout << "decrement in salary by 1lakh" << endl;
+                else
+                    cout << "Keep the salary same" << endl;
+            }
+        }
+
+        if (curr_rat > last_rat)
+            cout << "Performance improved very well this year" << endl;
+        else if (curr_rat < last_rat && age < 25)
+            cout << "Performance decresed so need training more" << endl;
+        else if (curr_rat < last_rat && age > 25)
+            cout << "performance deacresed and bad for company, can be removed from company" << endl;
+        else
+            cout << "performance of the employee is maintained" << endl;
+
+        if (experience > 8 && curr_rat == 5)
+            cout << "Should be promoted" << endl;
+    }
+    if (gender == "F")
+    {
+        if (dept == "web")
+        {
+            if (hour >= 30 && task > 7)
+            {
+                if (salary < 700000)
+                    cout << "Increament in salary by 1lakh" << endl;
+                else
+                    cout << "Keep salary same" << endl;
+            }
+            else
+            {
+                if (salary > 1200000)
+                    cout << "Decreament in salary by 1lakh" << endl;
+                else
+                    cout << "keep salary same" << endl;
+            }
+        }
+        if (dept == "testing")
+        {
+            if (hour >= 30 && task > 7)
+            {
+                if (salary < 600000)
+                    cout << "Increament in salary by 1lakh" << endl;
+                else
+                    cout << "Keep salary same" << endl;
+            }
+            else
+            {
+                if (salary > 1000000)
+                    cout << "Decreament in salary by 1lakh" << endl;
+                else
+                    cout << "keep salary same" << endl;
+            }
+        }
+        if (curr_rat > last_rat)
+            cout << "Performance improved very well this year" << endl;
+        else if (curr_rat < last_rat && age < 25)
+            cout << "Performance decresed so need training more" << endl;
+        else if (curr_rat < last_rat && age > 25)
+            cout << "performance deacresed and bad for company, can be removed from company" << endl;
+        else
+            cout << "performance of the employee is maintained" << endl;
+
+        if (experience > 8 && curr_rat == 5)
+            cout << "Should be promoted" << endl;
+    }
+}
+
+int main()
+{
+    checkPerformance();
+    return 0;
+}
