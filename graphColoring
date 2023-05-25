@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void createGraph(vector<int>adjList[], int V, int E)
+{
+    for (int i = 0; i < E; i++)
+    {
+        int src, dst;
+        cout << "Enter src and dst : " << endl;
+        cin >> src >> dst;
+
+        adjList[src].push_back(dst);
+        adjList[dst].push_back(src);
+    }
+
+    for (int i = 0; i < V; i++)
+    {
+        cout << i << " => ";
+        for (auto it : adjList[i])
+        {
+            cout << it << " ";
+        }
+        cout << endl;
+    }
+}
+
+bool isPossible(int currNode, int currColor, vector<int>adjList[], int m, vector<int>colorArr)
+{
+    for(auto x : adjList[currNode])
+    {
+        if(colorArr[x] == currColor)
+            return false;
+    }
+    return true;
+}
+
+bool solve(int currNode, vector<int> adjList[], int V, int m, vector<int> colorArr)
+{
+    if (currNode == V)
+        return true;
+
+    for (int currColor = 1; currColor <= m; currColor++)
+    {
+        if(isPossible(currNode, currColor, adjList, m, colorArr))
+        {
+            colorArr[currNode] = currColor;
+            if(solve(currNode+1, adjList,V, m, colorArr) == true)
+            {
+                return true;
+            }
+            colorArr[currNode] = 0;
+        }
+    }
+    return false;
+}
+
+int main()
+{
+    int V, E, m;
+    cout << "Enter no. of nodes and edges: " << endl;
+    cin >> V >> E;
+
+    cout << "Enter no of colors: " << endl;
+    cin >> m;
+
+    vector<int> adjList[V];
+
+    createGraph(adjList, V, E);
+
+    vector<int> colorArr(V, 0);
+
+    if (solve(0, adjList, V, m, colorArr))
+        cout << "Possible" << endl;
+    else
+        cout << "Not Possible" << endl;
+
+    return 0;
+}
